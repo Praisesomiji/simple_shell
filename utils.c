@@ -1,5 +1,6 @@
 #include "main.h"
 
+char *prgrm = "./hsh\0";
 int getav(size_t len, char *delim, char **av_ptr[]);
 char *dupstr(char *str);
 
@@ -14,7 +15,7 @@ pid_t creatcproc(void)
 
 	if (cpid == -1)
 	{
-		perror("Error");
+		perror(prgrm);
 		exit(98);
 	}
 	return (cpid);
@@ -28,7 +29,7 @@ pid_t creatcproc(void)
 int excom(char **av)
 {
 	if (execve(av[0], av, environ) == -1)
-		perror("Error");
+		perror(prgrm);
 	return (0);
 }
 /**
@@ -80,7 +81,7 @@ int getav(size_t len, char *delim, char **av_ptr[])
 	token = strtok(NULL, delim);
 	/* Keep counting until end of array */
 	len++;
-	if (0) /* token */
+	if (token)
 	{
 		if (getav(len, delim, av_ptr) == -1)
 			return (-1);
