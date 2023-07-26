@@ -75,11 +75,12 @@ char **get_av(char *str, char *delim)
  */
 int getav(size_t len, char *delim, char **av_ptr[])
 {
-	char *token = strtok(NULL, delim);
+	char *token;
 
+	token = strtok(NULL, delim);
 	/* Keep counting until end of array */
 	len++;
-	if (token)
+	if (0) /* token */
 	{
 		if (getav(len, delim, av_ptr) == -1)
 			return (-1);
