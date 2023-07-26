@@ -14,7 +14,7 @@ pid_t creatcproc(void)
 
 	if (cpid == -1)
 	{
-		perror("Error:");
+		perror("Error");
 		exit(98);
 	}
 	return (cpid);
@@ -28,7 +28,7 @@ pid_t creatcproc(void)
 int excom(char **av)
 {
 	if (execve(av[0], av, environ) == -1)
-		perror("Error:");
+		perror("Error");
 	return (0);
 }
 /**
@@ -44,7 +44,7 @@ char **get_av(char *str, char *delim)
 	char *token, *s;
 	char **av = NULL;
 
-	s = strdup(str);
+	s = dupstr(str);
 	if (!s)
 		exit(98);
 	token = strtok(s, delim);
@@ -117,10 +117,7 @@ int print_av(char *av[])
 
 	while (*(av + c))
 	{
-		if (av[c][strlen(av[c]) - 1] == '\n')
-			printf("|");
-		else
-			printf("%s ", av[c]);
+		printf("%s ", av[c]);
 		c++;
 	}
 	printf("\n");
@@ -153,14 +150,51 @@ int free_av(char *av[])
 char *dupstr(char *str)
 {
 	char *dup;
-	size_t n = strlen(str) - 1;
+	size_t n = _strlen(str) - 1;
 
 	if (str[n] == '\n')
-		dup = strndup(str, n);
+		dup = _strndup(str, n);
 	else
-		dup = strdup(str);
+		dup = _strdup(str);
 
-	if (!dup)
-		exit(98);
 	return (dup);
+}
+char *_strdup(char *s)
+{
+	size_t n = _strlen(s);
+	char *dup = _strndup(s, n);
+
+	return (dup);
+}
+char *_strndup(char *str, size_t n)
+{
+	char *dup;
+	size_t count;
+
+	if (!str)
+		return (NULL);
+
+	dup = malloc(sizeof(*dup) * (n + 1));
+	if (!dup)
+		return (NULL);
+
+	count = 0;
+	while (count < n && str[count])
+	{
+		dup[count] = str[count];
+		count++;
+	}
+	dup[n] = '\0';
+	return (dup);
+}
+size_t _strlen(char *str)
+{
+	size_t len = 0;
+
+	if (str)
+	{
+		while (str[len])
+		len++;
+	}
+	return (len);
 }
