@@ -33,7 +33,7 @@ int main(void)
 }
 /**
  * promptu - prompt user
- * 
+ *
  * Return: A line of strings
  */
 char *promptu(void)

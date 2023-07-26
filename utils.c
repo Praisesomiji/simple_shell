@@ -10,14 +10,14 @@ char *dupstr(char *str);
  */
 pid_t creatcproc(void)
 {
- 	pid_t cpid = fork();
- 
- 	if (cpid == -1)
- 	{
- 		perror("Error:");
- 		exit(98);
- 	}
- 	return (cpid);
+	pid_t cpid = fork();
+
+	if (cpid == -1)
+	{
+		perror("Error:");
+		exit(98);
+	}
+	return (cpid);
 }
 /**
  * excom - execute command.
@@ -27,8 +27,6 @@ pid_t creatcproc(void)
  */
 int excom(char **av)
 {
- 	extern char **environ;
-
 	if (execve(av[0], av, environ) == -1)
 		perror("Error:");
 	return (0);
@@ -164,5 +162,5 @@ char *dupstr(char *str)
 
 	if (!dup)
 		exit(98);
-	return(dup);
+	return (dup);
 }

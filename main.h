@@ -9,6 +9,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+extern char **environ;
+
 pid_t creatcproc(void);
 int excom(char **av);
 char **get_av(char *str, char *delim);
