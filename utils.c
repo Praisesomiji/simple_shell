@@ -159,6 +159,12 @@ char *dupstr(char *str)
 
 	return (dup);
 }
+/**
+ * _strdup - duplicate string
+ * @s: a string
+ *
+ * Return: String duplicate.
+ */
 char *_strdup(char *s)
 {
 	size_t n = _strlen(s);
@@ -166,6 +172,13 @@ char *_strdup(char *s)
 
 	return (dup);
 }
+/**
+ * _strndup - duplicate string up until n
+ * @str: a string
+ * @n: the length of string to be duplicated
+ *
+ * Return: String duplicate.
+ */
 char *_strndup(char *str, size_t n)
 {
 	char *dup;
@@ -187,6 +200,12 @@ char *_strndup(char *str, size_t n)
 	dup[n] = '\0';
 	return (dup);
 }
+/**
+ * _strlen - finf the length of a string
+ * @str: a string
+ *
+ * Return: String length.
+ */
 size_t _strlen(char *str)
 {
 	size_t len = 0;
