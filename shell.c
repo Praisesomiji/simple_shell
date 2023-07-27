@@ -6,6 +6,8 @@ size_t avlen(char **av);
 
 /**
  * main - run commands with full path without any argument
+ * @argc: argument count
+ * @argv: argument vector
  *
  * Return: Always (0).
  */
@@ -19,6 +21,13 @@ int main(void)
 	while (1)
 	{
 		line = promptu();
+
+		/* EOF situation */
+		if (!line)
+		{
+			write(STDIN_FILENO, "\n", 1);
+			break;
+		}
 		av = get_av(line, " ");
 
 		/* enforce no args feature */
@@ -47,11 +56,11 @@ char *promptu(void)
 	char *line = NULL;
 	size_t len = 0;
 
-	write(STDOUT_FILENO, "#cisfun$ ", 10);
+	write(STDOUT_FILENO, "$ ", 0);
 	if (getline(&line, &len, stdin) < 0)
 	{
 		free(line);
-		exit(98);
+		return (NULL);
 	}
 	return (line);
 }
