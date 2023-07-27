@@ -1,13 +1,12 @@
 #include "main.h"
 
 char *promptu(void);
+int usepath(char *prgrm, char *cmd);
 size_t noarg(char **av);
 size_t avlen(char **av);
 
 /**
  * main - run commands with full path without any argument
- * @argc: argument count
- * @argv: argument vector
  *
  * Return: Always (0).
  */
@@ -20,6 +19,8 @@ int main(void)
 
 	while (1)
 	{
+		/*do
+		{*/
 		line = promptu();
 
 		/* EOF situation */
@@ -29,9 +30,10 @@ int main(void)
 			break;
 		}
 		av = get_av(line, " ");
-
 		/* enforce no args feature */
 		/*noarg(av);*/
+		/*}
+		while (usepath(argv[0], av[0]) != 0);*/
 
 		cpid = creatcproc();
 		if (cpid == 0)
@@ -41,8 +43,24 @@ int main(void)
 		else
 		{
 			wait(&wstatus);
-			free(av);
+			free_av(av);
 		}
+	}
+	return (0);
+}
+/**
+ * usepath - use path
+ * @cmd: a command
+ *
+ * Return: Always 0.
+ */
+int usepath(char *prgrm, char *cmd)
+{
+	int fd = open(cmd, O_RDONLY);
+	if (fd == -1)
+	{
+		printf("%s: %s: not found\n", prgrm, cmd);
+		return (1);
 	}
 	return (0);
 }

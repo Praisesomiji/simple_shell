@@ -157,7 +157,6 @@ char *dupstr(char *str)
 		return (_strndup(str, n));
 	else
 		return (_strdup(str));
-
 }
 /**
  * _strdup - duplicate string
