@@ -15,7 +15,7 @@ pid_t creatcproc(void)
 
 	if (cpid == -1)
 	{
-		perror(prgrm);
+		perror("");
 		exit(98);
 	}
 	return (cpid);
@@ -151,15 +151,13 @@ int free_av(char *av[])
  */
 char *dupstr(char *str)
 {
-	char *dup;
 	size_t n = _strlen(str) - 1;
 
 	if (str[n] == '\n')
-		dup = _strndup(str, n);
+		return (_strndup(str, n));
 	else
-		dup = _strdup(str);
+		return (_strdup(str));
 
-	return (dup);
 }
 /**
  * _strdup - duplicate string

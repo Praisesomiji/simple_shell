@@ -31,7 +31,7 @@ int main(void)
 		av = get_av(line, " ");
 
 		/* enforce no args feature */
-		noarg(av);
+		/*noarg(av);*/
 
 		cpid = creatcproc();
 		if (cpid == 0)
