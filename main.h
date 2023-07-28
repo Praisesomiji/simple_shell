@@ -16,6 +16,8 @@ int excom(char **av);
 char **get_av(char *str, char *delim);
 int print_av(char *av[]);
 int free_av(char *av[]);
+size_t avlen(char **av);
+char **splitstr(char *s, char *delim);
 char *dupstr(char *str);
 char *_strndup(char *str, size_t n);
 char *_strdup(char *str);

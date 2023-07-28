@@ -1,9 +1,9 @@
 #include "main.h"
 
-char *promptu(void);
+/*char *promptu(void);*/
+int _promptu(char **line_ptr);
 int usepath(char *prgrm, char *cmd);
 size_t noarg(char **av);
-size_t avlen(char **av);
 
 /**
  * main - run commands with full path without any argument
@@ -12,28 +12,29 @@ size_t avlen(char **av);
  */
 int main(void)
 {
-	char *line;
+	char *line = NULL;
 	char **av;
 	pid_t cpid;
 	int wstatus;
 
 	while (1)
 	{
-		/*do
-		{*/
-		line = promptu();
-
-		/* EOF situation */
-		if (!line)
+		if (_promptu(&line) == -1)
 		{
-			write(STDIN_FILENO, "\n", 1);
+			/* EOF */
 			break;
 		}
-		av = get_av(line, " ");
+
+		if (*line == '\n')
+		{
+			free(line);
+			continue;
+		}
+		av = splitstr(line, " ");
+		free(line);
+		
 		/* enforce no args feature */
-		/*noarg(av);*/
-		/*}
-		while (usepath(argv[0], av[0]) != 0);*/
+		noarg(av);
 
 		cpid = creatcproc();
 		if (cpid == 0)
@@ -65,22 +66,26 @@ int usepath(char *prgrm, char *cmd)
 	return (0);
 }
 /**
- * promptu - prompt user
+ * _promptu - prompt user
+ * @line: a pointer to a string
  *
- * Return: A line of strings
+ * Return: 0 or -1.
  */
-char *promptu(void)
+int _promptu(char **line_ptr)
 {
-	char *line = NULL;
 	size_t len = 0;
 
-	write(STDOUT_FILENO, "$ ", 0);
-	if (getline(&line, &len, stdin) < 0)
+	/* if interactive shell */
+	if (isatty(STDIN_FILENO))
+		write(STDOUT_FILENO, "($) ", 4);
+
+	if (getline(line_ptr, &len, stdin) == -1)
 	{
-		free(line);
-		return (NULL);
+		free(*line_ptr);
+		write(STDOUT_FILENO, "\n", 1);
+		return (-1);
 	}
-	return (line);
+	return (0);
 }
 /**
  * noarg - exits program where args are inputted with command
@@ -95,21 +100,4 @@ size_t noarg(char **av)
 		av[0] = "\0";
 	}
 	return (0);
-}
-/**
- * avlen - find how many strings are in an array of strings
- * @av: array of strings
- *
- * Return: Length of array.
- */
-size_t avlen(char **av)
-{
-	size_t len = 0;
-
-	if (av)
-	{
-		while (av[len])
-			len++;
-	}
-	return (len);
 }

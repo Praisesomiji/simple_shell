@@ -24,7 +24,7 @@ pid_t creatcproc(void)
  * excom - execute command.
  * @av: a null terminated array of arguments
  *
- * Return: Always 0;
+ * Return: Always 0.
  */
 int excom(char **av)
 {
@@ -47,13 +47,13 @@ char **get_av(char *str, char *delim)
 
 	s = dupstr(str);
 	if (!s)
-		exit(98);
+		return (NULL);
 	token = strtok(s, delim);
 	if (token)
 		if (getav(len, delim, &av) == -1)
 		{
 			free(s);
-			exit(98);
+			return (NULL);
 		}
 
 	/* Place token in the first index position in av */
@@ -61,9 +61,90 @@ char **get_av(char *str, char *delim)
 	if (av[len] == NULL)
 	{
 		free(s);
-		exit(98);
+		return (NULL);
 	}
 	free(s);
+	return (NULL);
+}
+/**
+ * splitstr - divide a string into tokens using a delimeter
+ * @s: a string
+ * @delim: a delimeter
+ *
+ * Return: An array of strings tokens.
+ */
+char **splitstr(char *s, char *delim)
+{
+	/**
+	 * IF NOT s: return NULL
+	 * IF NOT delim: return duplicate of s
+	 *
+	 * duplicate s >> str
+	 * IF NOT str: return NULL
+	 *
+	 * a: WHILE str[char_count] IS NOT '\n': char_count(0)++
+	 * 	IF IS delim: replace with '\n': str_count(0)++
+	 * 		LET s now point to the next char,
+	 * 		RESET char_count, 
+	 * 		a()
+	 * c:
+	 */
+	size_t i;
+	size_t chr_count = 0;
+	size_t str_count = 0;
+	char *str = NULL;
+	char *_str = NULL;
+	char **av = NULL;
+
+	if (!s)
+		return (NULL);
+	str = dupstr(s);
+	if (!str)
+		return (NULL);
+	if (!delim)
+		delim = " ";
+
+	/* Divide string by '\n' and get token count */
+	_str = str;
+	str_count = 1;
+	while (_str[chr_count] != '\0')
+	{
+		if (_str[chr_count] == delim[0])
+		{
+			_str[chr_count] = '\n';
+			_str = _str + (chr_count + 1);
+			chr_count = 0;
+			if (*_str)
+				str_count++;
+		}
+		chr_count++;
+	}
+
+	/* Create a null-terminated array of string tokens */
+	i = sizeof(*av) * (str_count + 1);
+	av = malloc(sizeof(*av) * (str_count + 1));
+	if (!av)
+	{
+		free(s);
+		return (NULL);
+	}
+	av[str_count] = NULL;
+	_str = str;
+	for (i = 0; i < str_count; i++)
+	{
+		/* copy string until '\n' or '\0' */
+		av[i] = dupstr(_str);
+		if (!av[i])
+		{
+			free(str);
+			free_av(av);
+			return (NULL);
+		}
+		/* let _str now point to the next string after '\n' */
+		_str = _str + (_strlen(av[i]) + 1);
+	}
+
+	free(str);
 	return (av);
 }
 /**
@@ -144,6 +225,23 @@ int free_av(char *av[])
 	return (0);
 }
 /**
+ * avlen - find how many strings are in an array of strings
+ * @av: array of strings
+ *
+ * Return: Length of array.
+ */
+size_t avlen(char **av)
+{
+	size_t len = 0;
+
+	if (av)
+	{
+		while (av[len])
+			len++;
+	}
+	return (len);
+}
+/**
  * dupstr - duplicate string excluding newline char
  * @str: string
  *
@@ -151,12 +249,15 @@ int free_av(char *av[])
  */
 char *dupstr(char *str)
 {
-	size_t n = _strlen(str) - 1;
+	size_t n = 0;
 
-	if (str[n] == '\n')
-		return (_strndup(str, n));
-	else
-		return (_strdup(str));
+	if (!str)
+		return (NULL);
+	while (str[n] != '\0' && str[n] != '\n')
+	{
+		n++;
+	}
+	return (_strndup(str, n));
 }
 /**
  * _strdup - duplicate string
@@ -183,7 +284,7 @@ char *_strndup(char *str, size_t n)
 	char *dup;
 	size_t count;
 
-	if (!str)
+	if (!str || !n)
 		return (NULL);
 
 	dup = malloc(sizeof(*dup) * (n + 1));
